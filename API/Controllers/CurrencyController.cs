@@ -18,10 +18,19 @@ namespace API.Controllers
             _configuration = configuration;
         }
         [HttpGet]
-        public async Task<IActionResult> getSum(string userId)
+        public async Task<IActionResult> GetSum(string userId)
         {
             var sum= await _context.getSumAsync(userId);
             if(sum == -1)
+                return BadRequest("User not found.");
+            return Ok(sum);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody]int cost,string userId)
+        {
+            var sum = await _context.AddAsync(cost,userId);
+            if (sum == -1)
                 return BadRequest("User not found.");
             return Ok(sum);
         }

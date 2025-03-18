@@ -22,7 +22,7 @@ namespace Core.Entities
 
         public User() { }
 
-        public User(int id, string name, string email, string password, string profilePicturePath, string role)
+        public User(string id, string name, string email, string password, string profilePicturePath, string role)
         {
             Id = id;
             Name = name;
@@ -31,7 +31,7 @@ namespace Core.Entities
             ProfilePicturePath = profilePicturePath;
             Role = role;
         }
-        public User(int id, string name, string email, string password, string role)
+        public User(string id, string name, string email, string password, string role)
         {
             Id = id;
             Name = name;

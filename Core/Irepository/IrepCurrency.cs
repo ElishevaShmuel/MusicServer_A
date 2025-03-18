@@ -10,7 +10,7 @@ namespace Core.Irepository
     public interface IrepCurrency
     {
         public Task<int> getSumAsync(string userId);
-        public Task<int> AddAsync() { }
-        public Task<int> SubAsync() { }
+        public Task<int> AddAsync(int cost,string usrId);
+        public Task<int> SubAsync(int cost,string userId);
     }
 }

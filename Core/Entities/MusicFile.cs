@@ -15,7 +15,7 @@ namespace Core.Entities
         public long Size { get; set; }
         public string FilePath { get; set; }
         public string UserId { get; set; }
-
+        public int Cost { get; set; }
 
     }
 }

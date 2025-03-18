@@ -21,16 +21,17 @@ namespace API.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public async Task<IActionResult> Upload([FromBody] UploadViewModel userAndFile)
         {
-            if (file == null || file.Length == 0)
+            if (userAndFile.File == null || userAndFile.File.Length == 0)
                 return BadRequest("Please upload a valid audio file.");
 
-            var id = await _context.WriteAsync(file);
-
+            var id = await _context.WriteAsync(userAndFile);
             return Ok(new { id });
         }
-        public async Task<IActionResult> Download(string fileName)
+
+        [HttpPost("download")]
+        public async Task<IActionResult> Download([FromBody] UploadViewModel userAndFileCost, string fileName)
         {
 
             var filePath = Path.Combine(_audioDirectory, fileName);
@@ -40,11 +41,11 @@ namespace API.Controllers
                 return NotFound("קובץ השמע לא נמצא.");
             }
 
-            return await _context.ReadAsync(filePath, fileName);
+            return await _context.ReadAsync(userAndFileCost,filePath);
         }
 
         [HttpDelete("delete/{fileName}")]
-        public IActionResult DeleteAudio(string fileName)
+        public IActionResult DeleteAudio([FromBody] User user, string fileName)
         {
             var filePath = Path.Combine(_audioDirectory, fileName);
 
@@ -52,7 +53,7 @@ namespace API.Controllers
             {
                 return NotFound("קובץ השמע לא נמצא.");
             }
-
+            user.Files.Remove(user.Files.FirstOrDefault(f => f.FileName == fileName));
             System.IO.File.Delete(filePath);
             return Ok("קובץ השמע נמחק בהצלחה.");
         }

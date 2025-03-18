@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Data.repositories
 {
-    class repAudioFile:IrepAudioFile
+    public class repAudioFile:IrepAudioFile
     {
 
         private readonly DataContaxt _context;
@@ -20,16 +20,20 @@ namespace Data.repositories
         {
             _context = context;
         }
-        public async Task<int> addAsync(IFormFile file,string filePath)
+        public async Task<int> addAsync(UploadViewModel userAndFile)
         {
             // שמירת פרטי הקובץ במסד הנתונים
             var audioFile = new MusicFile
             {
-                FileName = file.FileName,
-                MimeType = file.ContentType,
-                Size = file.Length,
-                FilePath = filePath
+                FileName = userAndFile.File.FileName,
+                MimeType = userAndFile.File.ContentType,
+                Size = userAndFile.File.Length,
+                FilePath = userAndFile.File.FilePath,
+                Cost=userAndFile.File.Cost,
+                UserId= userAndFile.User.Id
             };
+            userAndFile.User.Currency.sum += userAndFile.CostFile;
+            userAndFile.User.Files.Add(audioFile);
 
             _context.AudioFiles.Add(audioFile);
             await _context.SaveChangesAsync();

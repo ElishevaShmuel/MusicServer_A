@@ -28,6 +28,7 @@ namespace Data.repositories
                 return -1;
 
             _context.Users.Add(user);
+            _context.Currencies.Add(user.Currensy);
             await _context.SaveChangesAsync();
             return 200;
         }
