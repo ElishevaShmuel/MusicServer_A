@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ namespace Core.Iservice
 {
     public interface IserAudioFile
     {
-        public Task<int> WriteAsync(IFormFile file);
+        public Task<int> WriteAsync(UploadViewModel userAndFile);
 
-        public Task<FileContentResult> ReadAsync(string filePath,string fileName);
+        public Task<FileContentResult> ReadAsync(UploadViewModel userAndFileCost,string filePath);
 
     }
 }

@@ -27,7 +27,11 @@ namespace Service.services
         {
             return await _repository.getSumAsync(userId);
         }
-        public async Task<int> AddAsync() { }
-        public async Task<int> SubAsync() { }
+        public async Task<int> AddAsync(int cost,string userId) {
+            return await _repository.AddAsync(cost, userId);
+        }
+        public async Task<int> SubAsync(int cost, string userId) { 
+            return await _repository.SubAsync(cost, userId);
+        }
     }
 }

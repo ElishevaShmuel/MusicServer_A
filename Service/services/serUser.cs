@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Core.Entities;
 using Core.Irepository;
-using Core.Iservice;
+//using Core.Iservice;
 using Org.BouncyCastle.Crypto.Generators;
 
 namespace Service.services
@@ -21,13 +21,20 @@ namespace Service.services
         public Task<int> Register(RegisterDto dto)
         {
             var passwordHash = BCrypt.PasswordToByteArray(dto.Password.ToArray());// הצפנת הסיסמה
-      
+
             var user = new User
             {
                 Name = dto.Username,
                 Email = dto.Email,
-                PasswordHash = passwordHash.ToString()
+                PasswordHash = passwordHash.ToString(),
+                Currency = new Currency(),
+                ProfilePicturePath = "/uploads/default.jpg",
+                Role=dto.Role
             };
+            user.Currency.UserId = user.Id;
+            user.Currency.sum = 0;
+
+
             return _repository.Register(user);
         }
 

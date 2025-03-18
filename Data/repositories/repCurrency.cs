@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Data.repositories
 {
-    public class repCurrency:IrepCurrency
+    public class repCurrency : IrepCurrency
     {
 
         private readonly DataContaxt _context;
@@ -31,8 +31,23 @@ namespace Data.repositories
             var sum = _context.Currencies.Where(c => c.userId == user.Id).Sum(c => c.sum);
             return sum;
         }
-        public async Task<int> AddAsync() { }
-        public async Task<int> SubAsync() { }
-    }
+        public async Task<int> AddAsync(int cost, string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return -1;
+            await _context.Users.FindAsync(user.Id).Currensy.sum += cost;
+            await _context.SaveChangesAsync();
+            return user.Currency.sum;
+        }
+        public async Task<int> SubAsync(int cost, string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return -1;
+            await _context.Users.FindAsync(user.Id).Currensy.sum -= cost;
+            await _context.SaveChangesAsync();
+            return user.Currency.sum;
+        }
     }
 }

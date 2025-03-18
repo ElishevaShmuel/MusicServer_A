@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace Core.Irepository
 {
     public interface IrepAudioFile
     {
-        public Task<int> addAsync(IFormFile file,string filePath);
+        public Task<int> addAsync(UploadViewModel userAndFile);
     }
 }

@@ -21,15 +21,15 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddDbContext<DataContaxt>();
-//builder.Services.AddSingleton<DataContaxt>();
-
 
 builder.Services.AddScoped<IserUser, serUser>();
-//builder.Services.AddSingleton<IserUser, serUser>();
-//builder.Services.AddTransient<IserUser, serUser>();
+builder.Services.AddScoped<IserCurrency, serCurrency>();
+builder.Services.AddScoped<IserAudioFile, serAudioFile>();
 
 builder.Services.AddScoped<IrepUser, RepUser>();
-//builder.Services.AddTransient<IrepUser, RepUser>();
+builder.Services.AddScoped<IrepCurrency, repCurrency>();
+builder.Services.AddScoped<IrepAudioFile, repAudioFile>();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
