@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Data.repositories
 {
-    public class RepUser : DataContaxt,IrepUser
+    public class RepUser : IrepUser
     {
         private readonly DataContaxt _context;
 
@@ -28,7 +28,7 @@ namespace Data.repositories
                 return -1;
 
             _context.Users.Add(user);
-            _context.Currencies.Add(user.Currensy);
+            _context.Currencies.Add(user.Currency);
             await _context.SaveChangesAsync();
             return 200;
         }

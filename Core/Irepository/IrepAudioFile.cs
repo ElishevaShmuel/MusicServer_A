@@ -11,6 +11,6 @@ namespace Core.Irepository
 {
     public interface IrepAudioFile
     {
-        public Task<int> addAsync(UploadViewModel userAndFile);
+        public Task<int> addAsync(UploadViewModel userAndFile,string filePath);
     }
 }
