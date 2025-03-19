@@ -1,9 +1,8 @@
-﻿using AutoMapper.Configuration;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Core.Entities;
 using Core.Irepository;
 //using Core.Iservice;
-using Org.BouncyCastle.Crypto.Generators;
+using Core.Iservice;
 
 namespace Service.services
 {
@@ -20,8 +19,8 @@ namespace Service.services
 
         public Task<int> Register(RegisterDto dto)
         {
-            var passwordHash = BCrypt.PasswordToByteArray(dto.Password.ToArray());// הצפנת הסיסמה
-
+            var passwordHash = dto.Password.Length%3+5.ToString();// הצפנת הסיסמה
+            
             var user = new User
             {
                 Name = dto.Username,
@@ -31,7 +30,7 @@ namespace Service.services
                 ProfilePicturePath = "/uploads/default.jpg",
                 Role=dto.Role
             };
-            user.Currency.UserId = user.Id;
+            user.Currency.userId = user.Id;
             user.Currency.sum = 0;
 
 
@@ -42,8 +41,8 @@ namespace Service.services
         public async Task<User> Login(LoginDto dto)
         {
             var user = await _repository.Login(dto);
-            var passwordHash = BCrypt.PasswordToByteArray(dto.Password.ToArray()).ToString();
-            if (user == null || !BCrypt.Equals(passwordHash, user.PasswordHash))
+            var passwordHash = dto.Password.Length % 3 + 5.ToString();
+            if (user == null || passwordHash!= user.PasswordHash)
             {
                 return null;
             }

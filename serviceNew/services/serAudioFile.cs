@@ -34,22 +34,23 @@ namespace Service.services
             var mimeType = "audio/mpeg";
             return new FileContentResult(fileBytes, mimeType)
             {
-                FileDownloadName = fileName
+                FileDownloadName = filePath.Split('/')[filePath.Split('/').Length-1],
             };
         }
-    }
-    public async Task<int> WriteAsync(UploadViewModel userAndFile)
-    {
-        var filePath = Path.Combine("path/path", userAndFile.File.FileName);
-        userAndFile.User.Currency.sum -= userAndFile.File.Cost;
 
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        public async Task<int> WriteAsync(UploadViewModel userAndFile)
         {
-            await userAndFile.File.CopyToAsync(stream);
-        }
-        var id = await _repository.addAsync(userAndFile);
+            var filePath = Path.Combine("path/path", userAndFile.File.FileName);
+            userAndFile.User.Currency.sum -= userAndFile.CostFile;
 
-        return id;
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await userAndFile.File.CopyToAsync(stream);
+            }
+            var id = await _repository.addAsync(userAndFile,filePath);
+
+            return id;
+        }
     }
 }
 

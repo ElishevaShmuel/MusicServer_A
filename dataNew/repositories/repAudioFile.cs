@@ -20,7 +20,7 @@ namespace Data.repositories
         {
             _context = context;
         }
-        public async Task<int> addAsync(UploadViewModel userAndFile)
+        public async Task<int> addAsync(UploadViewModel userAndFile,string filePath)
         {
             // שמירת פרטי הקובץ במסד הנתונים
             var audioFile = new MusicFile
@@ -28,8 +28,8 @@ namespace Data.repositories
                 FileName = userAndFile.File.FileName,
                 MimeType = userAndFile.File.ContentType,
                 Size = userAndFile.File.Length,
-                FilePath = userAndFile.File.FilePath,
-                Cost=userAndFile.File.Cost,
+                FilePath = filePath,
+                Cost=userAndFile.CostFile,
                 UserId= userAndFile.User.Id
             };
             userAndFile.User.Currency.sum += userAndFile.CostFile;
