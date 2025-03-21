@@ -20,6 +20,13 @@ namespace API.Controllers
             _configuration = configuration;
         }
 
+
+        [HttpGet("get")]
+        public async Task<IActionResult> getAllFile()
+        {
+            return await _context.getAllFiles();
+        }
+
         [HttpPost("upload")]
         public async Task<IActionResult> Upload([FromBody] UploadViewModel userAndFile)
         {
@@ -30,7 +37,7 @@ namespace API.Controllers
             return Ok(new { id });
         }
 
-        [HttpPost("download")]
+        [HttpGet("download")]
         public async Task<IActionResult> Download([FromBody] UploadViewModel userAndFileCost, string fileName)
         {
 

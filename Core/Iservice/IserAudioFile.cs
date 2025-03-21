@@ -14,6 +14,7 @@ namespace Core.Iservice
         public Task<int> WriteAsync(UploadViewModel userAndFile);
 
         public Task<FileContentResult> ReadAsync(UploadViewModel userAndFileCost,string filePath);
+        public Task<List<MusicFile>> getAllFiles();
 
     }
 }
