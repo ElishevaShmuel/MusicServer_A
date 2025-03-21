@@ -25,6 +25,10 @@ namespace Service.services
             _repository = repository;
             _configuration = configuration;
         }
+        public async Task<List<MusicFile>> getAllFiles()
+        {
+           return await _repository.GetAllFiles();
+        }
 
         public async Task<FileContentResult> ReadAsync(UploadViewModel userAndFileCost, string filePath)
         {
