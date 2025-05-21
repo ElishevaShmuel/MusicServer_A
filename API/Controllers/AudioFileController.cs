@@ -1,8 +1,11 @@
-﻿using Core.Entities;
 using Core.Iservice;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Core.Iservice;
+using Amazon.S3;
+using Core.Entities;
+using Amazon.S3.Model;
+using Newtonsoft.Json;
 
 namespace API.Controllers
 {
@@ -13,56 +16,103 @@ namespace API.Controllers
         private readonly IserAudioFile _context;
         private readonly IConfiguration _configuration;
         private readonly string _audioDirectory = Path.Combine(Directory.GetCurrentDirectory(), "uploads", "audio");
+        private readonly IAmazonS3 _s3Client;
 
-        public AudioFileController(IserAudioFile context, IConfiguration configuration)
+        public AudioFileController(IserAudioFile context, IConfiguration configuration, IAmazonS3 s3Client)
         {
             _context = context;
             _configuration = configuration;
+            _s3Client = s3Client;
+
         }
 
 
         [HttpGet("get")]
         public async Task<IActionResult> getAllFile()
         {
-            return await _context.getAllFiles();
+            var files = await _context.getAllFiles();
+            return Ok(files);
         }
 
-        [HttpPost("upload")]
-        public async Task<IActionResult> Upload([FromBody] UploadViewModel userAndFile)
+        [HttpGet("getById")]
+        public async Task<IActionResult> getById(int id)
         {
-            if (userAndFile.File == null || userAndFile.File.Length == 0)
-                return BadRequest("Please upload a valid audio file.");
-
-            var id = await _context.WriteAsync(userAndFile);
-            return Ok(new { id });
+            var files = await _context.getById(id);
+            return Ok(files);
         }
 
-        [HttpGet("download")]
-        public async Task<IActionResult> Download([FromBody] UploadViewModel userAndFileCost, string fileName)
+
+        [HttpGet("Upload")]
+        public async Task<IActionResult> GetPresignedUrl([FromQuery] string fileName)
         {
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                return BadRequest("File name is required.");
+            }
 
-            var filePath = Path.Combine(_audioDirectory, fileName);
+            var request = new GetPreSignedUrlRequest
+            {
+                BucketName = "musicommunity",
+                Key = fileName,
+                Verb = HttpVerb.PUT,
+                Expires = DateTime.UtcNow.AddMinutes(50),
+                ContentType = "audio/mpeg"
+            };
 
-            if (!System.IO.File.Exists(filePath))
+            string url = _s3Client.GetPreSignedURL(request);
+
+            return Ok(new { url });
+        }
+
+        [HttpPost("save")]
+        public async Task<IActionResult> save([FromBody] MusicFile file)
+        {
+            if (file == null)
+            {
+                return BadRequest("נתוני הקובץ אינם תקינים.");
+            }
+            Console.WriteLine(JsonConvert.SerializeObject(file));
+            await _context.WriteAsync(file);
+
+            return Ok("קובץ השמע נשמר בהצלחה.");
+        }
+
+
+        [HttpGet("Download")]
+        public IActionResult GetPresignedDownloadUrl(string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                return BadRequest("יש לספק שם קובץ.");
+            }
+
+            var request = new GetPreSignedUrlRequest
+            {
+                BucketName = "musicommunity",
+                Key = fileName,
+                Verb = HttpVerb.GET,
+                Expires = DateTime.UtcNow.AddMinutes(60) // תוקף של שעה
+            };
+
+            string url = _s3Client.GetPreSignedURL(request);
+            return Ok(new { url });
+        }
+
+
+        [HttpDelete("Delete")]
+        public IActionResult DeleteAudio([FromBody] MusicFile file)
+        {
+            var res = _context.removeAsync(file);
+            //מחזיר אם הקובץ נמחק בהצלחה
+            if (res.Result == -1)
             {
                 return NotFound("קובץ השמע לא נמצא.");
             }
-
-            return await _context.ReadAsync(userAndFileCost,filePath);
-        }
-
-        [HttpDelete("delete/{fileName}")]
-        public IActionResult DeleteAudio([FromBody] User user, string fileName)
-        {
-            var filePath = Path.Combine(_audioDirectory, fileName);
-
-            if (!System.IO.File.Exists(filePath))
+            else
             {
-                return NotFound("קובץ השמע לא נמצא.");
+                return Ok("קובץ השמע נמחק בהצלחה.");
             }
-            user.Files.Remove(user.Files.FirstOrDefault(f => f.FileName == fileName));
-            System.IO.File.Delete(filePath);
-            return Ok("קובץ השמע נמחק בהצלחה.");
         }
+
     }
 }

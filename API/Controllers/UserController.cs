@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace API.Controllers
 {
@@ -40,8 +41,10 @@ namespace API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
             var user = await _context.Login(dto);
+            if (user == null)
+                return BadRequest();
             string token = GenerateJwtToken(user);
-            return Ok(new { token });
+            return Ok(new { token ,user});
         }
 
 

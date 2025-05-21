@@ -17,8 +17,8 @@ namespace API.Controllers
             _context = context;
             _configuration = configuration;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetSum(string userId)
+        [HttpGet("getSum")]
+        public async Task<IActionResult> GetSum(int userId)
         {
             var sum= await _context.getSumAsync(userId);
             if(sum == -1)
@@ -26,10 +26,18 @@ namespace API.Controllers
             return Ok(sum);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody]int cost,string userId)
+        [HttpPost("addSum")]
+        public async Task<IActionResult> Add([FromBody]int cost,int userId)
         {
             var sum = await _context.AddAsync(cost,userId);
+            if (sum == -1)
+                return BadRequest("User not found.");
+            return Ok(sum);
+        }
+        [HttpPost("subSum")]
+        public async Task<IActionResult> sub([FromBody] int cost, int userId)
+        {
+            var sum = await _context.SubAsync(cost, userId);
             if (sum == -1)
                 return BadRequest("User not found.");
             return Ok(sum);
