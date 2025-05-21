@@ -1,3 +1,6 @@
+
+using Amazon.S3;
+using Amazon.Extensions.NETCore.Setup;
 using Core.Irepository;
 using Core.Iservice;
 using Data.data;
@@ -9,12 +12,18 @@ using Service.services;
 using System.Text;
 
 
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<IAmazonS3>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -45,9 +54,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+//builder.Services.AddAWSService<IAmazonS3>();
 
 
 var app = builder.Build();
+
+app.UseRouting();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -65,6 +77,11 @@ builder.Services.AddAuthorization();
 
 
 app.UseAuthorization();
+
+app.UseCors(builder => builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 app.MapControllers();
 
