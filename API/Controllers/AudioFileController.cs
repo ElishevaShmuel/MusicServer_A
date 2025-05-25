@@ -65,15 +65,16 @@ namespace API.Controllers
         }
 
         [HttpPost("save")]
-        public async Task<IActionResult> save([FromBody] MusicFile file)
+        public async Task<IActionResult> save([FromBody] MusicFileDto file)
         {
             if (file == null)
             {
                 return BadRequest("נתוני הקובץ אינם תקינים.");
             }
             Console.WriteLine(JsonConvert.SerializeObject(file));
-            await _context.WriteAsync(file);
-
+            var s=await _context.WriteAsync(file);
+            if (s == -1)
+                return BadRequest("המשתמש לא נמצא");
             return Ok("קובץ השמע נשמר בהצלחה.");
         }
 
@@ -100,7 +101,7 @@ namespace API.Controllers
 
 
         [HttpDelete("Delete")]
-        public IActionResult DeleteAudio([FromBody] MusicFile file)
+        public IActionResult DeleteAudio([FromBody] MusicFileDto file)
         {
             var res = _context.removeAsync(file);
             //מחזיר אם הקובץ נמחק בהצלחה

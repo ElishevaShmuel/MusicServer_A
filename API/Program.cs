@@ -54,7 +54,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-//builder.Services.AddAWSService<IAmazonS3>();
 
 
 var app = builder.Build();
