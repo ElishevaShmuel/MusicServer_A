@@ -82,9 +82,10 @@ namespace API.Controllers
         [HttpGet("Download")]
         public IActionResult GetPresignedDownloadUrl(string fileName)
         {
+
             if (string.IsNullOrWhiteSpace(fileName))
             {
-                return BadRequest("יש לספק שם קובץ.");
+                return BadRequest("File name is required.");
             }
 
             var request = new GetPreSignedUrlRequest
@@ -92,10 +93,11 @@ namespace API.Controllers
                 BucketName = "musicommunity",
                 Key = fileName,
                 Verb = HttpVerb.GET,
-                Expires = DateTime.UtcNow.AddMinutes(60) // תוקף של שעה
+                Expires = DateTime.UtcNow.AddMinutes(50),
             };
 
             string url = _s3Client.GetPreSignedURL(request);
+
             return Ok(new { url });
         }
 
