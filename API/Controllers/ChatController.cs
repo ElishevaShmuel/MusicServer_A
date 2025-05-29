@@ -12,7 +12,8 @@ public class ChatController : ControllerBase
     public ChatController(HttpClient httpClient, IConfiguration configuration)
     {
         _httpClient = httpClient;
-        _openAiApiKey = configuration["OpenAI:ApiKey"];
+        _openAiApiKey = Environment.GetEnvironmentVariable("API_KEY");
+        ;
     }
 
     [HttpPost]

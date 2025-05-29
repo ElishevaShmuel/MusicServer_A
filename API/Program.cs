@@ -40,19 +40,39 @@ builder.Services.AddScoped<IrepCurrency, repCurrency>();
 builder.Services.AddScoped<IrepAudioFile, repAudioFile>();
 
 
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer(options =>
+//    {
+//        options.TokenValidationParameters = new TokenValidationParameters
+//        {
+//            ValidateIssuer = true,
+//            ValidateAudience = false,
+//            ValidateLifetime = true,
+//            ValidateIssuerSigningKey = true,
+//            ValidIssuer =Environment.GetEnvironmentVariable("ISSUER"),
+//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("KEY")))
+//        };
+//    });
+
+var key = Environment.GetEnvironmentVariable("KEY");
+if (string.IsNullOrEmpty(key))
+{
+    throw new InvalidOperationException("Environment variable 'KEY' must be set and not null.");
+}
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        };
-    });
+   .AddJwtBearer(options =>
+   {
+       options.TokenValidationParameters = new TokenValidationParameters
+       {
+           ValidateIssuer = true,
+           ValidateAudience = false,
+           ValidateLifetime = true,
+           ValidateIssuerSigningKey = true,
+           ValidIssuer = Environment.GetEnvironmentVariable("ISSUER"),
+           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+       };
+   });
 
 builder.Configuration
     .AddEnvironmentVariables();
@@ -88,5 +108,7 @@ app.UseAuthorization();
 
 
 app.MapControllers();
+
 app.MapGet("/", () => "Welcome to the Audio File Management API!");
+
 app.Run();

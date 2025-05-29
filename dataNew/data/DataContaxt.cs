@@ -29,7 +29,8 @@ namespace Data.data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            var connectionString = Environment.GetEnvironmentVariable("DEFAULT_CONNECTION");
+
             optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }
    
