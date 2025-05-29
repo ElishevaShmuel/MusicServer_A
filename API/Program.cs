@@ -54,6 +54,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Configuration
+    .AddEnvironmentVariables();
+
 
 
 var app = builder.Build();

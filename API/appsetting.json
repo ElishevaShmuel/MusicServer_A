@@ -1,6 +1,27 @@
-﻿namespace API
-{
-    public class appsetting
-    {
+﻿{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
     }
+  },
+  "AllowedHosts": "*",
+  "Jwt": {
+    "Key": "",
+    "Issuer": ""
+  },
+  "AWS": {
+    "Region": "",
+    "Profile": ""
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": ""
+  },
+  "OpenAI": {
+    "ApiKey": ""
+  }
+
+
+
+
 }
