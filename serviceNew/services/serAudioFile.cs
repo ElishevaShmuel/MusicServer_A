@@ -27,31 +27,23 @@ namespace Service.services
         }
         public async Task<List<MusicFile>> getAllFiles()
         {
-           return await _repository.GetAllFiles();
+           return await _repository.getAllFiles();
+        }
+        public async Task<MusicFile> getById(int id)
+        {
+            return await _repository.getById(id);
         }
 
-        public async Task<FileContentResult> ReadAsync(UploadViewModel userAndFileCost, string filePath)
+        public async Task<int> removeAsync(MusicFileDto file)
         {
-            userAndFileCost.User.Currency.sum -= userAndFileCost.CostFile;
+            return await _repository.removeAsync(file);
 
-            var fileBytes = System.IO.File.ReadAllBytes(filePath);
-            var mimeType = "audio/mpeg";
-            return new FileContentResult(fileBytes, mimeType)
-            {
-                FileDownloadName = filePath.Split('/')[filePath.Split('/').Length-1],
-            };
         }
 
-        public async Task<int> WriteAsync(UploadViewModel userAndFile)
-        {
-            var filePath = Path.Combine("path/path", userAndFile.File.FileName);
-            userAndFile.User.Currency.sum -= userAndFile.CostFile;
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await userAndFile.File.CopyToAsync(stream);
-            }
-            var id = await _repository.addAsync(userAndFile,filePath);
+        public async Task<int> WriteAsync(MusicFileDto file)
+        {
+            var id = await _repository.addAsync(file,file.FilePath);
 
             return id;
         }

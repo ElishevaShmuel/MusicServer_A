@@ -1,7 +1,6 @@
 ﻿using Core.Entities;
 using Core.Irepository;
 using Core.Iservice;
-using Fluent.Infrastructure.FluentModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -23,14 +22,14 @@ namespace Service.services
             _repository = repository;
             _configuration = configuration;
         }
-        public async Task<int> getSumAsync(string userId)
+        public async Task<int> getSumAsync(int userId)
         {
             return await _repository.getSumAsync(userId);
         }
-        public async Task<int> AddAsync(int cost,string userId) {
+        public async Task<int> AddAsync(int cost,int userId) {
             return await _repository.AddAsync(cost, userId);
         }
-        public async Task<int> SubAsync(int cost, string userId) { 
+        public async Task<int> SubAsync(int cost, int userId) { 
             return await _repository.SubAsync(cost, userId);
         }
     }

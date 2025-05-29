@@ -11,7 +11,7 @@ namespace Core.Entities
     {
 
         public User User { get; set; }
-        public IFormFile File { get; set; }
+        public MusicFile File { get; set; }
         public int CostFile { get; set; }
         public Currency Currency { get; set; }
 

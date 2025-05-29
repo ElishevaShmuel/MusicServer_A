@@ -1,10 +1,13 @@
-﻿using Core.Entities;
+﻿//using AutoMapper.Configuration;
+using Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace Data.data
 {
@@ -15,13 +18,20 @@ namespace Data.data
         public DbSet<MusicFile> AudioFiles { get; set; }
         public DbSet<Currency> Currencies { get; set; }
 
+        private readonly IConfiguration _configuration;
 
+        public DataContaxt(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=Music");
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }
+   
     }
 }

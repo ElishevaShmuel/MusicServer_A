@@ -11,8 +11,10 @@ namespace Core.Irepository
 {
     public interface IrepAudioFile
     {
-        public Task<int> addAsync(UploadViewModel userAndFile,string filePath);
+        public Task<int> addAsync(MusicFileDto userAndFile,string filePath);
         public Task<List<MusicFile>> getAllFiles();
+        public Task<MusicFile> getById(int id);
+        public Task<int> removeAsync(MusicFileDto file);
 
     }
 }

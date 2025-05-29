@@ -1,7 +1,6 @@
 ﻿using Core.Entities;
 using Core.Irepository;
 using Data.data;
-using Fluent.Infrastructure.FluentModel;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -20,7 +19,7 @@ namespace Data.repositories
         {
             _context = context;
         }
-        public async Task<int> getSumAsync(string userId)
+        public async Task<int> getSumAsync(int userId)
         {
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
@@ -28,7 +27,7 @@ namespace Data.repositories
             var sum = _context.Currencies.Where(c => c.userId == user.Id).Sum(c => c.sum);
             return sum;
         }
-        public async Task<int> AddAsync(int cost, string userId)
+        public async Task<int> AddAsync(int cost, int userId)
         {var user = await _context.Users.FindAsync(userId);
             if (user == null)
                 return -1;
@@ -38,7 +37,7 @@ namespace Data.repositories
             await _context.SaveChangesAsync();
             return user.Currency.sum;
         }
-        public async Task<int> SubAsync(int cost, string userId)
+        public async Task<int> SubAsync(int cost, int userId)
         {
             var user = await _context.Users.FindAsync(userId);
             if (user == null)

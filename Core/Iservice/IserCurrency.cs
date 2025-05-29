@@ -8,9 +8,9 @@ namespace Core.Iservice
 {
     public interface IserCurrency
     {
-        public Task<int> getSumAsync(string userId);
-        public Task<int> AddAsync(int cost, string userId);
-        public Task<int> SubAsync(int cost, string userId);
+        public Task<int> getSumAsync(int userId);
+        public Task<int> AddAsync(int cost, int userId);
+        public Task<int> SubAsync(int cost, int userId);
     
 }
 }

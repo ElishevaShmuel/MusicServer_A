@@ -17,5 +17,9 @@ namespace Core.Irepository
         public void Logout(User user) { }
         public Task<User> getProfile(int id);
 
+        public Task<User?> ValidateAdminLogin(string email);
+        public Task<List<User>> getAllUserAsync();
+        public Task<int> DeleteUser(User u);
+
     }
 }

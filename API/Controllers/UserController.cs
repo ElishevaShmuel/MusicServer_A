@@ -47,9 +47,40 @@ namespace API.Controllers
             return Ok(new { token ,user});
         }
 
+        [HttpPost("admin/login")]
+        public async Task<IActionResult> AdminLogin([FromBody] LoginDto dto)
+        {
+            try
+            {
+                // בדיקה אם זה admin קיים
+                var admin = await _context.ValidateAdminLogin(dto.email, dto.password);
+                if (admin == null)
+                {
+                    return BadRequest(new { message = "Invalid admin credentials" });
+                }
+
+                // יצירת טוקן עם תפקיד Admin
+                string token = GenerateJwtToken(admin);
+
+                return Ok(new
+                {
+                    token = token,
+                    user = new
+                    {
+                        id = admin.Id,
+                        name = admin.Name,
+                        email = admin.Email,
+                        role = "Admin"
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error" });
+            }
+        }
 
 
-      
         [Authorize]
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()//תמונת פרופיל
@@ -67,6 +98,22 @@ namespace API.Controllers
 
 
 
+
+        [Authorize]
+        [HttpGet("users")]
+        public async Task<List<User>> GetAllUser()
+        {
+           return  await _context.getAllUserAsync();
+        }
+
+        [Authorize]
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteUser([FromBody]User u)
+        {
+            var res = await _context.DeleteUser(u); if (res == -1)
+                return BadRequest(new {massage= "there isnt email"});
+            return Ok(new {massage = "remove"});
+        }
 
 
 

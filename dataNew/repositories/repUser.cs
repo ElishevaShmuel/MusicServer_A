@@ -32,18 +32,37 @@ namespace Data.repositories
             await _context.SaveChangesAsync();
             return 200;
         }
+        public async Task<int> DeleteUser(User u)
+        {
+            _context.Users.Remove(u);
+            await _context.SaveChangesAsync();
+            return 1;
+        }
 
 
 
         public async Task<User> Login(LoginDto dto)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            var user = await _context.Users
+                                .Include(u => u.Files)
+                                .FirstOrDefaultAsync(u => u.Email == dto.email);
+            return user;
+        }
+
+        public async Task<User> ValidateAdminLogin(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.Role == "Admin");
+
         }
         public void Logout(User user) { }
 
         public async Task<User> getProfile(int id)
         {
             return await _context.Users.FindAsync(id);
+        }
+        public async Task<List<User>> getAllUserAsync()
+        {
+            return await _context.Users.ToListAsync();
         }
     }
 }

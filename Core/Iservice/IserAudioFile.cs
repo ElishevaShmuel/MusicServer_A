@@ -11,10 +11,11 @@ namespace Core.Iservice
 {
     public interface IserAudioFile
     {
-        public Task<int> WriteAsync(UploadViewModel userAndFile);
+        public Task<int> WriteAsync(MusicFileDto userAndFile);
 
-        public Task<FileContentResult> ReadAsync(UploadViewModel userAndFileCost,string filePath);
+        public Task<int> removeAsync(MusicFileDto file);
         public Task<List<MusicFile>> getAllFiles();
+        public Task<MusicFile> getById(int id);
 
     }
 }

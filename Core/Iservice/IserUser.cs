@@ -15,5 +15,9 @@ namespace Core.Iservice
         public void Logout(User user) { }
 
         public Task<User> getProfile(int id);
+        Task<User?> ValidateAdminLogin(string email, string password);
+        public Task<List<User>> getAllUserAsync();
+        public Task<int> DeleteUser(User u);
+
     }
 }
