@@ -85,5 +85,5 @@ app.UseAuthorization();
 
 
 app.MapControllers();
-
+app.MapGet("/", () => "Welcome to the Audio File Management API!");
 app.Run();
