@@ -15,6 +15,9 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
 
 // Add services to the container.
@@ -54,7 +57,7 @@ builder.Services.AddScoped<IrepAudioFile, repAudioFile>();
 //        };
 //    });
 
-var key = Environment.GetEnvironmentVariable("KEY");
+var key = Environment.GetEnvironmentVariable("JWT__KEY");
 if (string.IsNullOrEmpty(key))
 {
     throw new InvalidOperationException("Environment variable 'KEY' must be set and not null.");
@@ -69,13 +72,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
            ValidateAudience = false,
            ValidateLifetime = true,
            ValidateIssuerSigningKey = true,
-           ValidIssuer = Environment.GetEnvironmentVariable("ISSUER"),
+           ValidIssuer = Environment.GetEnvironmentVariable("JWT__ISSUER"),
            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
        };
    });
 
-builder.Configuration
-    .AddEnvironmentVariables();
 
 
 
