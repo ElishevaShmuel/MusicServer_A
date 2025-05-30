@@ -17,7 +17,6 @@ COPY ["Core/Core.csproj", "Core/"]
 COPY ["dataNew/dataNew.csproj", "dataNew/"]
 COPY ["serviceNew/serviceNew.csproj", "serviceNew/"]
 RUN dotnet restore "./API/API.csproj"
-RUN ls -la /app
 COPY . .
 WORKDIR "/src/API"
 RUN dotnet build "./API.csproj" -c $BUILD_CONFIGURATION -o /app/build
