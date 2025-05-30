@@ -16,7 +16,9 @@ COPY ["API/API.csproj", "API/"]
 COPY ["Core/Core.csproj", "Core/"]
 COPY ["dataNew/dataNew.csproj", "dataNew/"]
 COPY ["serviceNew/serviceNew.csproj", "serviceNew/"]
+COPY appsettings.json ./appsettings.json
 RUN dotnet restore "./API/API.csproj"
+RUN ls -la /app
 COPY . .
 WORKDIR "/src/API"
 RUN dotnet build "./API.csproj" -c $BUILD_CONFIGURATION -o /app/build
@@ -30,4 +32,6 @@ RUN dotnet publish "./API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:Use
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN ls -la /app
+
 ENTRYPOINT ["dotnet", "API.dll"]
