@@ -16,7 +16,6 @@ COPY ["API/API.csproj", "API/"]
 COPY ["Core/Core.csproj", "Core/"]
 COPY ["dataNew/dataNew.csproj", "dataNew/"]
 COPY ["serviceNew/serviceNew.csproj", "serviceNew/"]
-COPY ["API/appsettings.json", "./appsettings.json"]
 
 RUN dotnet restore "./API/API.csproj"
 COPY . .
