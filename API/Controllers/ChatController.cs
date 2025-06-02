@@ -12,7 +12,7 @@ public class ChatController : ControllerBase
     public ChatController(HttpClient httpClient, IConfiguration configuration)
     {
         _httpClient = httpClient;
-        _openAiApiKey = Environment.GetEnvironmentVariable("API_KEY");
+        _openAiApiKey = Environment.GetEnvironmentVariable("OPENAI__API_KEY");
         ;
     }
 
