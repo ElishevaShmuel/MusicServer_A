@@ -28,7 +28,7 @@ public class ChatController : ControllerBase
         {
             var openAiRequest = new
             {
-                model = "gpt-4o",
+                model = "gpt-4-turbo",
                 messages = new[]
                 {
                     new { role = "system", content = "אתה עוזר וירטואלי של אתר מיוזיק - פלטפורמה לשיתוף מוזיקה. תמיד תענה בעברית ובצורה ידידותית." }
