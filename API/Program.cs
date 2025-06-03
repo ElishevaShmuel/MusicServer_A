@@ -77,7 +77,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
        };
    });
 
-builder.Services.AddCors(); 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", policy =>
+    {
+        policy.WithOrigins(
+            "https://musiaclient-react-b.onrender.com",
+            "https://muisicngclient-c.onrender.com"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
 
 
 
@@ -86,6 +98,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+app.UseCors("AllowSpecificOrigins"); 
 
 
 // Configure the HTTP request pipeline.
